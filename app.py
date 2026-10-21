@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 import json
+from huggingface_hub import hf_hub_download
 
 # Page settings
 st.set_page_config(
@@ -11,10 +12,16 @@ st.set_page_config(
     layout="wide"
 )
 
-# Load trained model and metadata
+# Load trained model from Hugging Face
+MODEL_REPO_ID = "Aleeeha/crop-yield-model"
+
 @st.cache_resource
 def load_model():
-    return joblib.load("crop_yield_model.joblib")
+    model_path = hf_hub_download(
+        repo_id=MODEL_REPO_ID,
+        filename="crop_yield_model.joblib"
+    )
+    return joblib.load(model_path)
 
 @st.cache_data
 def load_metadata():
